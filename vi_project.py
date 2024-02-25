@@ -3,54 +3,78 @@ import pycalphad.variables as v
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from decimal import Decimal
 
+np.seterr(divide='ignore', invalid='ignore')
 
-model1 = 'F:/Python/vi_git/test_data/CoCr-01Oik.tdb'
-model2 = 'F:/Python/vi_git/test_data/CoCr-18Cac.tdb'
+TDB_LIST = ['CoCr-01Oik.tdb', 'CoCr-18Cac.tdb']
 
-tdb = Database(model1)
-tdb2 = Database(model2)
-print(tdb.elements)
+class TDBPoints:
+    """
+    Экземплярами класса являются точки представляемой в
+    иницализаторе термодинамической базы данных
+    """
+    _TOLERANCE = Decimal(0.00001)  #Точность (Пока не используется)
+    __P = 101325                   #Давление (Па)
 
-cr_conc = 0.382368193604148 #fcc_a1
-t = 1321.34831460674
+    def __init__(self, tdb_object, checked_phase = None, element = None):
+        self.tdb_object = Database(tdb_object)
+        self.element = element
+        self.checked_phase = checked_phase
+        self.all_phases = list(self.tdb_object.phases.keys())
+        self.t = None
+        self.condition = {v.X(self.element) : (Decimal(0.01), Decimal(1), Decimal(0.001)),
+                          v.T: (self.t),
+                          v.P: 101325}
+        self.vector = None
 
-cr_conc1 = 0.559283413215997
-t1 = 1422.47191011235
+    def get_params(self, t, checked_phase, element = None):
+        """
+        Вызов метода изменяет параметры, подставляемые в pycalphad.equilibrium
+        (на текущий момент только температура)
+        """
+        if element is not None:
+            self.element = element
+        self.t = t
+        self.checked_phase = checked_phase
+        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.001)),
+                          v.T: (self.t),
+                          v.P: __class__.__P}
+        return self
 
-phases = ['LIQUID', 'FCC_A1', 'BCC_A2', 'HCP_A3', 'SIGMA_OLD']
+    def get_max_concentration(self):
+        """
+        Метод возвращает кортеж с расситаными параметрами ТДБ,
+        соответствующими приближению из эксперементальных данных
+        ('Концентрация вещества (x)', 'Список из фаз', 'Значения растворимостей фаз NP')
+        """
+        result = self.do_mapping()
+        return max(result, key = lambda x: x[2][x[1].index(self.checked_phase.upper())])
 
-# {'CR', 'VA', 'CO'}
+    @staticmethod
+    def check_cond(vector, x, phase):
+        """
+        Проверка условия в do_mapping
+        """
+        return len(np.squeeze(vector.Phase.values)[x]) >= 2 and np.squeeze(vector.Phase.values)[x].tolist().count('') <= 1 \
+                    and phase.upper() in np.squeeze(vector.Phase.values)[x]
 
-def make_conditions(temp, conc, N=1, P=101325):
-    return {v.X('CR') : conc, v.T: (temp), v.P: P}
+    def do_equilibrium(self):
+        """
+        Метод запускает pycalphad.equilibrium и присваивает результат атрибуту vector
+        """
+        self.vector = equilibrium(self.tdb_object, self.tdb_object.elements, self.all_phases, self.condition)
 
-cond = make_conditions(t1, cr_conc1)
+    def do_mapping(self):
+        """
+        Мапимся по значениям из pycalphad.equilibrium и проверяем на условия:
+        1. Количество фаз >= 2
+        2. В фазах должна присутствовать интересущая нас фаза
+        """
+        self.do_equilibrium()
+        res = self.vector
+        return [(res.X_CR.values[x_cr],
+            list(np.squeeze(res.Phase.values)[x_cr]),
+            np.squeeze(res.NP.values)[x_cr].tolist()) for x_cr in range(len(res[f'X_{self.element}'].values))
+                if self.check_cond(res, x_cr, self.checked_phase)]
 
-res = equilibrium(tdb, tdb.elements, phases, cond)
-res2 = equilibrium(tdb2, tdb.elements, phases, cond)
-
-# res2 = calculate(tdb, tdb.elements, phases, P=101325, T=t)
-
-print(f'CoCr-01Oik.tdb: {res.Phase.values}')
-print(f'CoCr-18Cac.tdb: {res2.Phase.values}')
-
-
-
-#
-# def res(el, phases, cond):
-#     return equilibrium(tdb, el, phases, cond)
-#
-#
-
-
-# gamma_data = np.random.gamma(2, 0.5, size=200)
-# print(sns.histplot(gamma_data))
-
-
-# with open(model1, mode = 'r') as f:
-#     for line in f.readlines():
-#         print(line)
-
-# Гистограмма
-# dist = plt.hist(vals, bins = 'auto')
