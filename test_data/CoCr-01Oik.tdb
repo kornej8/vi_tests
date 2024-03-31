@@ -136,6 +136,13 @@ $
      +SIGMA_OLD_COCRCO_0+SIGMA_OLD_COCRCO_1*T;,,                      N 01Oik !
  PAR  G(SIGMA_OLD,CO:CR:CR),,           +8*GFCCCO+22*GHSERCR
              +SIGMA_OLD_COCRCR_0+SIGMA_OLD_COCRCR_1*T;,,               N 01Oik !
+$
+ FUNCTION L0        -11900+2.4*T;                                            6000 N !
+ FUNCTION L1        -6500+0.1*T;                                             6000 N !
+ FUNCTION L0_FCC    -23080+8.34*T;                                            6000 N !
+ FUNCTION L1_FCC    +12370-12.08*T;                                             6000 N !
+ FUNCTION L0_HCP    -25149+13*T;                                            6000 N !
+ FUNCTION L1_HCP    +1719-3*T;                                             6000 N !
 $ ------------------------------------------------------------------------------
 $
  ASSESSED_SYSTEM
