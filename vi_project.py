@@ -47,6 +47,7 @@ class TDBPoints:
 
         return self
 
+
     @property
     def model_params(self):
         return self._params

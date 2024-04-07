@@ -94,6 +94,7 @@ class LogLikeGrad(pt.Op):
             The noise standard deviation that out function requires.
         """
 
+
         # add inputs as class attributes
         self.func = func
         self.data = data
