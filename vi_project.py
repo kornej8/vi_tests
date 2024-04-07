@@ -47,6 +47,7 @@ class TDBPoints:
 
         return self
 
+
     @property
     def model_params(self):
         return self._params
@@ -61,6 +62,7 @@ class TDBPoints:
         ('Концентрация вещества (x)', 'Список из фаз', 'Значения растворимостей фаз NP')
         """
         result = self.do_mapping()
+        print(result)
         return max(result, key=lambda x: x[2][x[1].index(self.checked_phase.upper())])
 
     @staticmethod
