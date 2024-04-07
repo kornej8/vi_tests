@@ -59,7 +59,8 @@ def main():
     df = pd.read_excel(path)
     logl = LogLike(get_x_based_on_experement, df, tdb_object)
     observed_data = df.cr_conc
-
+    print(df)
+    exit()
     with pm.Model() as model:
         vL0_FCC = pm.Normal("vL0_FCC", mu=-12000, sigma=1)
 
