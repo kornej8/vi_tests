@@ -27,7 +27,7 @@ class LogLike(pt.Op):
     itypes = [pt.dvector]  # expects a vector of parameter values when called
     otypes = [pt.dscalar]  # outputs a single scalar value (the log likelihood)
 
-    def __init__(self, func, df, tdb_object, params = None):
+    def __init__(self, func, df, tdb_object):
         """
         Initialise the Op with various things that our log-likelihood function
         requires. Below are the things that are needed in this particular
@@ -48,7 +48,6 @@ class LogLike(pt.Op):
         # add inputs as class attributes
         self.data = df
         self.tdb = tdb_object
-        self.params = params
         self.func = func
         self.logpgrad = LogLikeGrad(self.func, self.data, self.tdb)
 
@@ -56,10 +55,11 @@ class LogLike(pt.Op):
         # the method that is used when calling the Op
         (theta,) = inputs  # this will contain my variables
 
-        self.params = inputs[0][0]
+        p_l0_0 = inputs[0][0]
+        p_l0_1 = inputs[0][1]
         # params, df, tdb_object
         # call the log-likelihood function
-        logl = self.func(self.params, self.data, self.tdb)
+        logl = self.func([p_l0_0,p_l0_1], self.data, self.tdb)
 
         outputs[0][0] = logl  # output the log-likelihood
 
@@ -94,7 +94,6 @@ class LogLikeGrad(pt.Op):
             The noise standard deviation that out function requires.
         """
 
-
         # add inputs as class attributes
         self.func = func
         self.data = data
@@ -102,8 +101,8 @@ class LogLikeGrad(pt.Op):
     def perform(self, node, inputs, outputs):
         (theta,) = inputs
         # calculate gradients
-        # params, df, tdb_object
-        grads = optimize.approx_fprime(theta, self.func, np.sqrt(np.finfo(float).eps), self.data, self.tdb)
+        eps = np.sqrt(np.finfo(float).eps)
+        grads = optimize.approx_fprime(theta, self.func, [eps, eps], self.data, self.tdb)
 
         outputs[0][0] = grads
 

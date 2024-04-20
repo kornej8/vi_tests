@@ -40,7 +40,7 @@ def get_max_concentration_2(x ,*args):
 
     def get_maximum_np(x, *argss):
         cond = {v.X('CR'): (x[0]), v.T: (argss[0]), v.P: 101325, v.N: 1}
-        res = equilibrium(dbf, dbf_elem, dbf_phase, conditions=cond, parameters=params_dict)
+        res = equilibrium(dbf, dbf_elem, dbf_phase, conditions=cond, parameters=params_dict, to_xarray = False)
         ans = 1-np.squeeze(res.NP.values)[0]
         if ans <= 0.001:
             return 100

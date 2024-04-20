@@ -12,14 +12,21 @@ print_row = True
 def replace_values_on_func(row):
     return row
 
+# def return_uniq_func_name(lst, func_name, sep='', postfix=0):
+#     check_func_name = f"{func_name}{sep}{'' if postfix == 0 else postfix}"
+#     # print(check_func_name)
+#     if check_func_name in lst:
+#         postfix += 1
+#         return return_uniq_func_name(lst, func_name, '_', postfix)
+#     else:
+#         return check_func_name
+
+
 def return_uniq_func_name(lst, func_name, sep='', postfix=0):
     check_func_name = f"{func_name}{sep}{'' if postfix == 0 else postfix}"
     # print(check_func_name)
-    if check_func_name in lst:
-        postfix += 1
-        return return_uniq_func_name(lst, func_name, '_', postfix)
-    else:
-        return check_func_name
+    return return_uniq_func_name(lst, func_name, '_', postfix+1) if check_func_name in lst else check_func_name
+
 
 def create_func_name(params_list_old):
     lst = params_list_old
@@ -94,7 +101,7 @@ with open('test_data/CoCr-01Oik_test.tdb', 'r+') as tdb:
                         if print_flag and not params_part:
                             params_list = create_func_name(params)
                             for param in params_list:
-                                print(f" FUNCTION {param}                               6000 N !", file=file, end = '\n')
+                                print(f" FUNCTION {param}  6000 N !", file=file, end = '\n')
                             params = []
                             print_flag = False
                     if print_row:

@@ -20,13 +20,13 @@ class TDBPoints:
     _TOLERANCE = Decimal(0.00001)  # Точность (Пока не используется)
     __P = 101325  # Давление (Па)
 
-    def __init__(self, tdb_object, checked_phase=None, element=None):
+    def __init__(self, tdb_object, checked_phase=None, element=None, t = None):
         self.tdb_object = Database(tdb_object)
         self.element = element
         self.checked_phase = checked_phase
         self.all_phases = list(self.tdb_object.phases.keys())
-        self.t = None
-        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.001)),
+        self.t = t
+        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.01)),
                           v.T: (self.t),
                           v.P: 101325}
         self.vector = None
@@ -41,12 +41,15 @@ class TDBPoints:
             self.element = element
         self.t = t
         self.checked_phase = checked_phase
-        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.001)),
+        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.01)),
                           v.T: (self.t),
                           v.P: __class__.__P}
 
         return self
 
+    @property
+    def tdb(self):
+        return self.tdb_object
 
     @property
     def model_params(self):
@@ -62,7 +65,6 @@ class TDBPoints:
         ('Концентрация вещества (x)', 'Список из фаз', 'Значения растворимостей фаз NP')
         """
         result = self.do_mapping()
-        print(result)
         return max(result, key=lambda x: x[2][x[1].index(self.checked_phase.upper())])
 
     @staticmethod
@@ -78,7 +80,9 @@ class TDBPoints:
         """
         Метод запускает pycalphad.equilibrium и присваивает результат атрибуту vector
         """
-        self.vector = equilibrium(self.tdb_object, self.tdb_object.elements, self.all_phases, self.condition,
+        self.vector = equilibrium(self.tdb_object, self.tdb_object.elements,
+                                  self.all_phases,
+                                  self.condition,
                                   parameters=self.model_params)
 
     def do_mapping(self):

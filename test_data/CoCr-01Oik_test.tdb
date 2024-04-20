@@ -59,21 +59,17 @@ $
  PAR  G(HCP_A3,CO:VA),,                 +GHSERCO;,,                   N 91Din !
  PAR  TC(HCP_A3,CO:VA),,                 1396.00;,,                   N 91Din !
  PAR  BM(HCP_A3,CO:VA),,                    1.35;,,                   N 91Din !
+
+ $
  PAR  G(FCC_A1,CO:VA),,                 +GHSERCO
              +427.591-0.615248*T;,,                                   N 91Din !
- PAR  TC(FCC_A1,CO:VA),,                 1396.00;,,                   N 91Din !
- PAR  BM(FCC_A1,CO:VA),,                    1.35;,,                   N 91Din !
- PAR  G(BCC_A2,CO:VA),,                 +GHSERCO+2938-0.7138*T;,,     N 91Din !
- PAR  TC(BCC_A2,CO:VA),,                 1450.00;,,                   N 91Din !
- PAR  BM(BCC_A2,CO:VA),,                    1.35;,,                   N 91Din !
-$PAR  G(CBCC_A12,CO:VA),,               +GHSERCO+4155;,,              N 91Din !
-$PAR  G(CUB_A13,CO:VA),,                +GHSERCO+3155;,,              N 91Din !
- PAR  G(LIQUID,CO),,                    +GLIQCO;,,                    N 91Din !
 $
  FUNCTION GHSERCO   298.15  +310.241+133.36601*T-25.0861*T*LN(T)
        -0.002654739*T**2-1.7348E-07*T**3+72527*T**(-1);
       1768.00  Y  -17197.666+253.28374*T-40.5*T*LN(T)+9.3488E+30*T**(-9);
       6000.00  N !
+
+
  FUNCTION GLIQCO    298.15  +15085.037-8.931932*T+GHSERCO-2.19801E-21*T**7;
       1768.00  Y  -846.61+243.599944*T-40.5*T*LN(T);
       6000.00  N !
@@ -118,8 +114,16 @@ $ Checked against paper. Checked at 6000 K.
 $
  PAR  L(LIQUID,CO,CR;0),,               -11900+2.4*T;,,               N 98Hav !
  PAR  L(LIQUID,CO,CR;1),,               -6500+0.1*T;,,                N 98Hav !
+
+
 $
+
+
+
  PAR  L(FCC_A1,CO,CR:VA;0),,            -23080+8.34*T;,,              N 98Hav !
+
+
+
  PAR  L(FCC_A1,CO,CR:VA;1),,            +12370-12.08*T;,,             N 98Hav !
  PAR  TC(FCC_A1,CO,CR:VA;0),,           -8082;,,                      N 01Oik !
  PAR  TC(FCC_A1,CO,CR:VA;1),,           +6684;,,                      N 01Oik !
@@ -141,8 +145,6 @@ $
  FUNCTION L1        -6500+0.1*T;                                             6000 N !
  FUNCTION L0_FCC    -23080+8.34*T;                                            6000 N !
  FUNCTION L1_FCC    +12370-12.08*T;                                             6000 N !
- FUNCTION L0_HCP    -25149+13*T;                                            6000 N !
- FUNCTION L1_HCP    +1719-3*T;                                             6000 N !
 $ ------------------------------------------------------------------------------
 $
  ASSESSED_SYSTEM
