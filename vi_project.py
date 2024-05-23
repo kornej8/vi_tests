@@ -26,7 +26,7 @@ class TDBPoints:
         self.checked_phase = checked_phase
         self.all_phases = list(self.tdb_object.phases.keys())
         self.t = t
-        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.01)),
+        self.condition = {v.X(self.element): (Decimal(0), Decimal(1), Decimal(0.0001)),
                           v.T: (self.t),
                           v.P: 101325}
         self.vector = None
@@ -41,7 +41,7 @@ class TDBPoints:
             self.element = element
         self.t = t
         self.checked_phase = checked_phase
-        self.condition = {v.X(self.element): (Decimal(0.01), Decimal(1), Decimal(0.01)),
+        self.condition = {v.X(self.element): (Decimal(0), Decimal(1), Decimal(0.0001)),
                           v.T: (self.t),
                           v.P: __class__.__P}
 

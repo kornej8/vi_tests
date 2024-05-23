@@ -26,9 +26,9 @@ tdb_object = f"./test_data/{tdb}"
 file_name = 'sigma_fcc_allibert.xls'
 path = f'./test_data/{file_name}'
 tdb_object_path = f"./test_data/{tdb}"
-dbf = Database(tdb_object_path)
-dbf_elem = list(dbf.elements)
-dbf_phase = list(dbf.phases.keys())
+# dbf = Database(tdb_object_path)
+# dbf_elem = list(dbf.elements)
+# dbf_phase = list(dbf.phases.keys())
 
 def get_max_concentration_2(x ,*args):
     temp = args[1]
@@ -40,7 +40,7 @@ def get_max_concentration_2(x ,*args):
 
     def get_maximum_np(x, *argss):
         cond = {v.X('CR'): (x[0]), v.T: (argss[0]), v.P: 101325, v.N: 1}
-        res = equilibrium(dbf, dbf_elem, dbf_phase, conditions=cond, parameters=params_dict)
+        res = equilibrium(dbf, dbf.elements, list(dbf.phases.keys()), conditions=cond, parameters=params_dict)
         ans = 1-np.squeeze(res.NP.values)[0]
         if ans <= 0.001:
             return 100
@@ -59,7 +59,7 @@ def get_x_based_on_experement_2(params, df, dbf):
 
     return np.array(sum(res))
 
-def main2(df):
+def main2(df, dbf):
     pytensor.config.exception_verbosity = 'high'
     logl = LogLike(get_x_based_on_experement_2, df, dbf)
     observed_data = df[0]
@@ -88,7 +88,7 @@ def main2(df):
 if __name__ == '__main__':
     df = pd.read_excel(path)
     df = df.loc[df.phase == 'fcc_a1']
-
+    dbf = Database(tdb_object_path)
     df = [df['cr_conc'].values, df['T'].values]
 
-    result, tracker_res, advi_res = main2(df)
+    result, tracker_res, advi_res = main2(df, dbf)

@@ -46,6 +46,7 @@ def create_params_name(params_list_old):
 
 with open('test_data/CoCr-01Oik.tdb', 'r+') as tdb:
     with open('test_data/CoCr-01Oik_with_funcs.tdb', 'w') as file:
+
         params = []
         lines = enumerate(tdb.readlines())
         if True:

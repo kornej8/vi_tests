@@ -133,7 +133,7 @@ $
  PAR  L(LIQUID,CO,CR;0),,               -12008.6239+2.2019*T;,,       N 02Oik !
  PAR  L(LIQUID,CO,CR;1),,               -5836.4696+1.1402*T;,,        N 02Oik !
 $
- PAR  L(FCC_A1,CO,CR:VA;0),,            -24052.09+8.1884*T;,,         N 02Oik !
+ PAR  L(FCC_A1,CO,CR:VA;0),,            L0_0_FCC+L0_1_FCC*T;,,         N 02Oik !
  PAR  L(FCC_A1,CO,CR:VA;1),,            +5331.8252-6.9059*T;,,        N 02Oik !
  PAR  TC(FCC_A1,CO,CR:VA;0),,           -9392.5259;,,                 N 02Oik !
  PAR  TC(FCC_A1,CO,CR:VA;1),,           +8383.0424;,,                 N 02Oik !
@@ -163,6 +163,8 @@ $
  FUNCTION GSCOCR1   298.15  +180000;                                   6000 N !
  FUNCTION GSCOCR2   298.15  +348000;                                   6000 N !
  FUNCTION GSCOCR3   298.15  +525000;                                   6000 N !
+ FUNCTION L0_0_FCC               -24052.09;                           6000 N !
+ FUNCTION L0_1_FCC               +8.1884;                            6000 N !
 $ ------------------------------------------------------------------------------
 $
  ASSESSED_SYSTEM

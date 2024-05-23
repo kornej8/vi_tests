@@ -44,7 +44,7 @@ def create_func_name(params_list_old):
         # foo(lst[i][1][:-1])
 
         uniq_func_name = return_uniq_func_name(fncs, func_name)
-        # print(uniq_func_name, func_name)
+        print(uniq_func_name, func_name)
         fncs.append(uniq_func_name)
     return fncs
 
@@ -76,6 +76,7 @@ with open('test_data/CoCr-01Oik_test.tdb', 'r+') as tdb:
         lines = enumerate(tdb.readlines())
         if True:
             for i, line in lines:
+                # print(line, end =  '')
                 if show_next:
                     val += line.strip()
                     params.append(val.replace('PAR', '').strip().replace('\n', '').split(',,'))
@@ -100,11 +101,14 @@ with open('test_data/CoCr-01Oik_test.tdb', 'r+') as tdb:
                                 print_flag = True
                         if print_flag and not params_part:
                             params_list = create_func_name(params)
+                            # print(line)
                             for param in params_list:
+                                # print(f" FUNCTION {param}  6000 N !", end='\n')
                                 print(f" FUNCTION {param}  6000 N !", file=file, end = '\n')
                             params = []
                             print_flag = False
                     if print_row:
+                        print(line, end='')
                         print(line, file=file, end = '')
 exit()
 

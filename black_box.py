@@ -60,7 +60,6 @@ class LogLike(pt.Op):
         # params, df, tdb_object
         # call the log-likelihood function
         logl = self.func([p_l0_0,p_l0_1], self.data, self.tdb)
-
         outputs[0][0] = logl  # output the log-likelihood
 
     def grad(self, inputs, g):
@@ -103,6 +102,42 @@ class LogLikeGrad(pt.Op):
         # calculate gradients
         eps = np.sqrt(np.finfo(float).eps)
         grads = optimize.approx_fprime(theta, self.func, [eps, eps], self.data, self.tdb)
-
         outputs[0][0] = grads
 
+# [-2.30795729e+04,  7.64607207e+00]
+
+# theta = [-2.30795729e+04,  7.64607207e+00]
+# eps = np.sqrt(np.finfo(float).eps)
+
+
+
+    # print((func([1,1 + eps], 1, 200) - func([1,1], 1, 200)) / eps)
+
+
+# def normal_gradients(theta, x, data, sigma):
+#     """
+#     Calculate the partial derivatives of a function at a set of values. The
+#     derivatives are calculated using the central difference, using an iterative
+#     method to check that the values converge as step size decreases.
+#
+#     Parameters
+#     ----------
+#     theta: array_like
+#         A set of values, that are passed to a function, at which to calculate
+#         the gradient of that function
+#     x, data, sigma:
+#         Observed variables as we have been using so far
+#
+#
+#     Returns
+#     -------
+#     grads: array_like
+#         An array of gradients for each non-fixed value.
+#     """
+#
+#     grads = np.empty(2)
+#     aux_vect = data - my_model(theta, x)  # /(2*sigma**2)
+#     grads[0] = np.sum(aux_vect * x)
+#     grads[1] = np.sum(aux_vect)
+#
+#     return grads

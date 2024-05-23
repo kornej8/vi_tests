@@ -1,4 +1,3 @@
-import sys
 import pandas as pd
 import numpy as np
 from pycalphad import Database
@@ -19,16 +18,16 @@ import pycalphad.variables as v
 from scipy.optimize import minimize
 from black_box import LogLike
 
-abs_path = './test_data'
-
 ELEM = 'CR'
 tdb = 'CoCr-18Cac.tdb'
-tdb_object = f"{abs_path}/{tdb}"
+tdb_object = f"./test_data/{tdb}"
 # file_name = sys.argv[-1]
 file_name = 'sigma_fcc_allibert.xls'
-path = f'{abs_path}/{file_name}'
-tdb_object_path = f"{abs_path}/{tdb}"
-dbf = Database(tdb_object_path)
+path = f'./test_data/{file_name}'
+tdb_object_path = f"./test_data/{tdb}"
+tdb_path = f"./test_data/CoCr-01Oik.tdb"
+element = 'CR'
+dbf = Database(tdb_object)
 
 
 def mainsss(params, dfs, tdb):
@@ -73,12 +72,7 @@ def main2(df):
         cr_observed = pm.ConstantData(name='cr_observed', value=observed_data)
         log = pm.Normal('y', logl(theta), sigma=1, observed=cr_observed)
 
-    with model:
-        mean_field = pm.smc.sample_smc(1000)
-
-        d = {'model': model, 'mean_field': mean_field}
-
-    return mean_field
+    return model
 
 
 if __name__ == '__main__':
@@ -87,4 +81,6 @@ if __name__ == '__main__':
 
     df = [df['cr_conc'].values, df['T'].values]
 
-    result, tracker_res, advi_res = main2(df)
+    model = main2(df)
+    with model:
+        mean_field = pm.sample_smc(1000, chains=1, progressbar=True)

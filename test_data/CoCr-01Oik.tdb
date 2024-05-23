@@ -120,7 +120,7 @@ $
  PAR  L(LIQUID,CO,CR;1),,               -6500+0.1*T;,,                N 98Hav !
 
 $
- PAR  L(FCC_A1,CO,CR:VA;0),,            -23080+8.34*T;,,              N 98Hav !
+ PAR  L(FCC_A1,CO,CR:VA;0),,            L0_0_FCC+L0_1_FCC*T;,,              N 98Hav !
  PAR  L(FCC_A1,CO,CR:VA;1),,            +12370-12.08*T;,,             N 98Hav !
 $
 
@@ -143,6 +143,7 @@ $
  PAR  G(SIGMA_OLD,CO:CR:CR),,           +8*GFCCCO+22*GHSERCR
              +SIGMA_OLD_COCRCR_0+SIGMA_OLD_COCRCR_1*T;,,               N 01Oik !
 $  functions for quick acess for parameters
+
  FUNCTION L0_0_FCC               -23080;                           6000 N !
  FUNCTION L0_1_FCC               +8.34;                            6000 N !
 $ ------------------------------------------------------------------------------
